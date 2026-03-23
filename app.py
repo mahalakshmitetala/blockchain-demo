@@ -74,8 +74,7 @@ for i in range(1, 6):
 @app.route("/")
 def index():
     return render_template("index.html", chain=blockchain.chain)
-
-
+    
 # UPDATED MINE ROUTE WITH TIMESTAMP FEATURE
 @app.route("/mine/<int:index>", methods=["POST"])
 def mine(index):
@@ -98,7 +97,5 @@ def mine(index):
         "nonce": block.nonce,
         "timestamp": block.timestamp
     })
-
-
 if __name__ == "__main__":
     app.run(debug=True)
