@@ -20,6 +20,14 @@ This project illustrates how blocks are linked using hashes and how modifying on
 - JavaScript
 - CryptoJS (SHA256)
 
+## Demo
+
+### Blockchain Visualization
+![Blockchain UI](screenshots/ui.png)
+
+### Invalid Chain Highlight
+![Invalid Blocks](screenshots/invalid.png)
+
 ## Run Locally
 
 ### Get the code
