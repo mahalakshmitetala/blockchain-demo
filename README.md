@@ -22,23 +22,23 @@ This project illustrates how blocks are linked using hashes and how modifying on
 
 ## ▶️ Run Locally
 
-Clone the repository:
+## Clone the repository:
 
 git clone https://github.com/mahalakshmitetala/blockchain-demo.git
 
-Navigate to project:
+## Navigate to project:
 
 cd blockchain-demo
 
-Install dependencies:
+## Install dependencies:
 
 pip install flask
 
-Run application:
+## Run application:
 
 python app.py
 
-Open in browser:
+## Open in browser:
 
 http://127.0.0.1:5000
 
