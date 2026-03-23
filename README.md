@@ -20,27 +20,26 @@ This project illustrates how blocks are linked using hashes and how modifying on
 - JavaScript
 - CryptoJS (SHA256)
 
-## ▶️ Run Locally
+## Run Locally
 
-## Clone the repository:
+### Get the code
 
+```bash
 git clone https://github.com/mahalakshmitetala/blockchain-demo.git
+```
 
-## Navigate to project:
+### Install dependencies
 
+```bash
 cd blockchain-demo
-
-## Install dependencies:
-
 pip install flask
+```
 
-## Run application:
+### Run the app
 
+```bash
 python app.py
-
-## Open in browser:
-
-http://127.0.0.1:5000
+```
 
 ## How It Works
 - Each block stores previous block hash
