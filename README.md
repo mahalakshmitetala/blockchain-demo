@@ -18,4 +18,4 @@ This is a simple blockchain simulation project using Python Flask.
 3. Open http://127.0.0.1:5000/
 
 ## Author
-Taruni
+Rajalaxmi
