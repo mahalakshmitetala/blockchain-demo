@@ -23,10 +23,10 @@ This project illustrates how blocks are linked using hashes and how modifying on
 ## Demo
 
 ### Blockchain Visualization
-![Blockchain UI](screenshots/ui.png)
+![Blockchain UI](ui.png)
 
 ### Invalid Chain Highlight
-![Invalid Blocks](screenshots/invalid.png)
+![Invalid Blocks](invalid.png)
 
 ## Run Locally
 
