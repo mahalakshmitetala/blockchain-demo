@@ -7,16 +7,12 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 </head>
-
-<body>
-    
+<body> 
 <div class="header">
     <h1>⛓️ Secure Blockchain Visualizer</h1>
     <p class="subtitle">Interactive demonstration of block linking and mining</p>
 </div>
-
 <div class="chain-wrapper">
-
 {% for block in chain %}
 <div class="block-card">
 
@@ -62,14 +58,10 @@
         </button>
 
     </div>
-
 </div>
 {% endfor %}
-
 </div>
-
 <script>
-
 // 🔹 UPDATE CHAIN HASHES
 function updateChain(index) {
 
@@ -115,7 +107,6 @@ function updateChain(index) {
         }
     }
 }
-
 // 🔹 MINE BLOCK
 async function mineBlock(index) {
 
@@ -136,8 +127,6 @@ async function mineBlock(index) {
 
     updateChain(index);
 }
-
 </script>
-
 </body>
 </html>
