@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Blockchain Demo</title>
+    <title>Blockchain Visualizer</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
@@ -10,84 +10,132 @@
 
 <body>
 
-<h1>⛓️ Blockchain Demo (Python)</h1>
+<div class="header">
+    <h1>⛓️ Secure Blockchain Visualizer</h1>
+    <p class="subtitle">Interactive demonstration of block linking and mining</p>
+</div>
 
-<div class="blockchain-container">
+<div class="chain-wrapper">
 
 {% for block in chain %}
-<div class="block">
+<div class="block-card">
 
-    <h3>Block {{ block.index }}</h3>
+    <div class="block-header">
+        <h2>Block ID : {{ block.index }}</h2>
+        <span class="badge">Active</span>
+    </div>
 
-    <p class="timestamp"><strong>Timestamp:</strong> {{ block.timestamp }}</p>
+    <div class="block-body">
 
-    <p><strong>Data:</strong>
-        <input type="text" value="{{ block.data }}" 
-               oninput="liveUpdate({{ loop.index0 }})">
-    </p>
+        <p class="time">
+            <strong>Created At:</strong> 
+            <span class="timestamp">{{ block.timestamp }}</span>
+        </p>
 
-    <p><strong>Nonce:</strong> 
-        <span id="nonce-{{ loop.index0 }}">{{ block.nonce }}</span>
-    </p>
+        <p>
+            <strong>Block Data</strong>
+            <input type="text" 
+                   class="data-input"
+                   value="{{ block.data }}"
+                   oninput="updateChain({{ loop.index0 }})">
+        </p>
 
-    <p><strong>Previous Hash:</strong> 
-        <span id="prev-{{ loop.index0 }}">{{ block.previous_hash }}</span>
-    </p>
+        <div class="hash-section">
+            <p>
+                <strong>Nonce Value</strong><br>
+                <span id="nonce-{{ loop.index0 }}">{{ block.nonce }}</span>
+            </p>
 
-    <p><strong>Hash:</strong>
-        <span id="hash-{{ loop.index0 }}">{{ block.hash }}</span>
-    </p>
+            <p>
+                <strong>Previous Block Hash</strong><br>
+                <span id="prev-{{ loop.index0 }}">{{ block.previous_hash }}</span>
+            </p>
 
-    <button onclick="mine({{ loop.index0 }})">Mine</button>
+            <p>
+                <strong>Current Block Hash</strong><br>
+                <span id="hash-{{ loop.index0 }}">{{ block.hash }}</span>
+            </p>
+        </div>
+
+        <button class="mine-btn" onclick="mineBlock({{ loop.index0 }})">
+            Mine Block
+        </button>
+
+    </div>
 
 </div>
 {% endfor %}
 
 </div>
 
+
 <script>
 
-// ✅ LIVE HASH UPDATE
-function liveUpdate(index) {
+// 🔹 UPDATE CHAIN HASHES
+function updateChain(index) {
 
-    const blocks = document.getElementsByClassName("block");
+    const cards = document.getElementsByClassName("block-card");
 
-    for (let i = index; i < blocks.length; i++) {
+    for (let i = index; i < cards.length; i++) {
 
-        const data = blocks[i].querySelector("input").value;
-        const prevHash = i === 0 ? "0" : document.getElementById("hash-" + (i-1)).innerText;
-        const nonce = document.getElementById("nonce-" + i).innerText;
+        const inputData = cards[i].querySelector(".data-input").value;
 
-        const timestamp = blocks[i].querySelector(".timestamp").innerText.split(": ")[1];
+        const previousHash =
+            i === 0
+            ? "0"
+            : document.getElementById("hash-" + (i - 1)).innerText;
 
-        const text = i + prevHash + timestamp + JSON.stringify(data) + nonce;
+        const nonceVal =
+            document.getElementById("nonce-" + i).innerText;
 
-        const hash = CryptoJS.SHA256(text).toString();
+        const timeVal =
+            cards[i].querySelector(".timestamp").innerText;
 
-        document.getElementById("hash-" + i).innerText = hash;
-        document.getElementById("prev-" + i).innerText = prevHash;
+        const rawText =
+            i + previousHash + timeVal + JSON.stringify(inputData) + nonceVal;
+
+        const newHash = CryptoJS.SHA256(rawText).toString();
+
+        // update UI
+        document.getElementById("hash-" + i).innerText = newHash;
+        document.getElementById("prev-" + i).innerText = previousHash;
+
+        // reset state
+        cards[i].classList.remove("invalid");
+
+        // check BOTH hash + chain link
+        const validHash = newHash.startsWith("00");
+
+        const validLink =
+            i === 0 ||
+            document.getElementById("prev-" + i).innerText ===
+            document.getElementById("hash-" + (i - 1)).innerText;
+
+        if (!validHash || !validLink) {
+            cards[i].classList.add("invalid");
+        }
     }
 }
 
-// ✅ MINE FUNCTION (UPDATED)
-async function mine(index) {
+// 🔹 MINE BLOCK
+async function mineBlock(index) {
 
-    const dataValue = document.querySelectorAll(".block input")[index].value;
+    const inputValue = document.querySelectorAll(".block-card input")[index].value;
 
-    const res = await fetch("/mine/" + index, {
+    const response = await fetch("/mine/" + index, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ data: dataValue })
+        body: JSON.stringify({ data: inputValue })
     });
 
-    const data = await res.json();
+    const result = await response.json();
 
-    document.getElementById("hash-" + index).innerText = data.hash;
-    document.getElementById("nonce-" + index).innerText = data.nonce;
+    document.getElementById("hash-" + index).innerText = result.hash;
+    document.getElementById("nonce-" + index).innerText = result.nonce;
 
-    liveUpdate(index);
+    updateChain(index);
 }
 
 </script>
